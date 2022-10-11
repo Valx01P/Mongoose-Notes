@@ -11,8 +11,15 @@ mongoose.connect("mongodb://localhost:27017/fruitsDB", { useNewUrlParser: true }
 //create new schema
 
 const fruitSchema = new mongoose.Schema ({
-	name: String,
-	rating: Number,
+	name: {
+    type: String,         //validation parameters vvv
+    required: [true, "Please check your data entry, name not specified"]
+  },
+	rating: {
+  type: Number,
+  min: 1,                 //validation parameters
+  max: 10                 //validation parameters
+},
 	review: String
 });
 
@@ -35,47 +42,57 @@ fruit.save()
 
 const personSchema = new mongoose.Schema ({
 	name: String,
-	age: Number
+	age: Number,
+  favoriteFruit: fruitSchema      //1
 });
 
 const Person = mongoose.model("Person", )
 
+const pineapple = new Fruit({
+  name: "Pineapple",
+  score: 9,
+  review: "Great fruit."      //2
+});
+
+pineapple.save();
+
 const person = new Person({
-	name: "John",
-	age: 37
+	name: "Amy",
+	age: 12,
+  favoriteFruit: pineapple      //3
 });
 
 person.save();
 
 //<-2 , 3->//
 
-const kiwi = new Fruit({
-	name:"Kiwi",
-	score: 10,
-	review: "The best fruit!"
-});
-
-const orange = new Fruit({
-	name:"Orange",
-	score: 4,
-	review: "Too sour for me"
-});
-
-const banana = new Fruit({
-	name:"Banna",
-	score: 3,
-	review: "Wierd texture"
-});
+// const kiwi = new Fruit({
+// 	name:"Kiwi",
+// 	score: 10,
+// 	review: "The best fruit!"
+// });
+//
+// const orange = new Fruit({
+// 	name:"Orange",
+// 	score: 4,
+// 	review: "Too sour for me"
+// });
+//
+// const banana = new Fruit({
+// 	name:"Banna",
+// 	score: 3,
+// 	review: "Wierd texture"
+// });
 
 //comment this part out to avoid adding more than once ^^^
 
-Fruit.insertMany([kiwi, orange, banana], function(err){	//you can read this on the api model
-if (err) {
-	console.log(err);
-} else {
-	console.log("Succesfully saved all the fruits to fruitsDB");
-}
-});
+// Fruit.insertMany([kiwi, orange, banana], function(err){	//you can read this on the api model
+// if (err) {
+// 	console.log(err);
+// } else {
+// 	console.log("Succesfully saved all the fruits to fruitsDB");
+// }
+// });
 
 //<-3, 4->//
 
